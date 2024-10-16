@@ -24,7 +24,7 @@ export const TextInput = (props: TextInputProps) => {
     <View className="bg-gray-100 text-red-100 rounded-lg flex-row items-center">
       <RnTextInput
         secureTextEntry={!showPass && props.password}
-        className="px-4 flex-1 h-[50px] text-lg font-roboto text-gray-800"
+        className="px-4 flex-1 h-[50px] text-base font-roboto text-gray-800"
         placeholderTextColor={'#6b7280'}
         placeholder={placeholder}
       />
