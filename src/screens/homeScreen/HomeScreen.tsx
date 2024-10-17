@@ -1,11 +1,11 @@
-import {Header, MapView} from '@components/organisms';
+import {HomeHeader, MapView} from '@components/organisms';
 import {StatusBar} from 'react-native';
 
 export const HomeScreen = () => {
   return (
     <>
       <StatusBar backgroundColor={'transparent'} barStyle={'dark-content'} />
-      <Header />
+      <HomeHeader />
       {/* Mapview */}
       <MapView />
     </>

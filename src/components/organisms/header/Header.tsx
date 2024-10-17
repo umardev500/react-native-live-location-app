@@ -1,10 +1,15 @@
-import {ArrowBack, BellIconOn, MoreVert} from '@components/atoms';
+import {ArrowBack} from '@components/atoms';
 import {useNavigation} from '@react-navigation/native';
 import {useCallback} from 'react';
 import {Text, TouchableWithoutFeedback, View} from 'react-native';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-export const Header = () => {
+type Props = {
+  title?: string;
+  actions?: React.ReactNode;
+};
+
+export const Header = (props: Props) => {
   const insets = useSafeAreaInsets();
   const headerStyle = {
     paddingTop: insets.top,
@@ -12,10 +17,6 @@ export const Header = () => {
   const navigation = useNavigation();
   const handleBack = useCallback(() => {
     navigation.goBack();
-  }, []);
-
-  const navigateToNotification = useCallback(() => {
-    navigation.navigate('Notification');
   }, []);
 
   return (
@@ -29,16 +30,13 @@ export const Header = () => {
               <ArrowBack color={'#1F2937'} />
             </TouchableWithoutFeedback>
           )}
-          <Text className="text-lg font-medium text-gray-800">Home</Text>
+          <Text className="text-lg font-medium text-gray-800">
+            {props.title}
+          </Text>
         </View>
 
         {/* Right */}
-        <View className="flex-row items-center gap-4">
-          <TouchableWithoutFeedback onPress={navigateToNotification}>
-            <BellIconOn />
-          </TouchableWithoutFeedback>
-          <MoreVert />
-        </View>
+        {props.actions}
       </View>
     </View>
   );

@@ -25,7 +25,7 @@ export const MapView = () => {
 
   return (
     <View className="flex-1">
-      <Mapbox.MapView style={styles.map} key={Math.random().toString()}>
+      <Mapbox.MapView style={styles.map}>
         <Mapbox.Camera followZoomLevel={8} followUserLocation />
         <Mapbox.UserLocation showsUserHeadingIndicator visible animated />
       </Mapbox.MapView>
