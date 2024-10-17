@@ -1,5 +1,5 @@
 import {Button, TextInput} from '@components/atoms';
-import {useNavigation} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
 import {useCallback} from 'react';
 import {
   KeyboardAvoidingView,
@@ -15,12 +15,12 @@ export const LoginScreen = () => {
   const navigation = useNavigation();
 
   const handleSubmit = useCallback(() => {
-    navigation.navigate('Home');
+    navigation.dispatch(StackActions.replace('Home'));
   }, []);
 
   return (
     <>
-      <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
+      <StatusBar backgroundColor={'transparent'} barStyle={'dark-content'} />
       {/* Container */}
       <SafeAreaView className="flex-1 bg-white py-4">
         <View className="flex-1 items-center justify-between">
