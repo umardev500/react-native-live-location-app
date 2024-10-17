@@ -1,6 +1,8 @@
 import {Button, TextInput} from '@components/atoms';
 import {API} from '@env';
-import {useNavigation} from '@react-navigation/native';
+import {StackActions, useNavigation} from '@react-navigation/native';
+import {mmkvStorage} from '@storage/mmkv';
+import {LoginResponse, User} from '@typed/login';
 import {useCallback, useState} from 'react';
 import {
   KeyboardAvoidingView,
@@ -10,11 +12,14 @@ import {
   Text,
   View,
 } from 'react-native';
+import {useMMKVStorage} from 'react-native-mmkv-storage';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export const LoginScreen = () => {
   const [loginLoading, setLoginLoading] = useState(false);
   const navigation = useNavigation();
+  const [, setToken] = useMMKVStorage<string>('token', mmkvStorage);
+  const [, setUser] = useMMKVStorage<User>('user', mmkvStorage);
 
   const handleSubmit = useCallback(async () => {
     setLoginLoading(true);
@@ -28,18 +33,19 @@ export const LoginScreen = () => {
         },
         body: JSON.stringify({
           username: 'admin',
-          pasword: 'anambas',
+          password: 'anambas',
         }),
       });
 
-      const json = await resp.json();
-      console.log(json);
+      const json: LoginResponse = await resp.json();
+      setToken(() => json.token);
+      setUser(() => json.user);
+      navigation.dispatch(StackActions.replace('Home'));
     } catch (e) {
       console.log(e);
     } finally {
       setLoginLoading(false);
     }
-    // navigation.dispatch(StackActions.replace('Home'));
   }, []);
 
   return (

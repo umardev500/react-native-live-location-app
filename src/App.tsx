@@ -48,6 +48,7 @@ const App = () => {
         }
       } catch (e) {
         console.log(e);
+        //
       }
     };
 
