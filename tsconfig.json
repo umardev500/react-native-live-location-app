@@ -6,6 +6,7 @@
       "@components/*": ["./src/components/*"],
       "@screens/*": ["./src/screens/*"],
       "@typed/*": ["./src/types/*"]
+      "@hooks/*": ["./src/hooks/*"]
     }
   }
 }
