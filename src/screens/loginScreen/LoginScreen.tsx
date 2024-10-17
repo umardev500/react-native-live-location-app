@@ -1,4 +1,6 @@
 import {Button, TextInput} from '@components/atoms';
+import {useNavigation} from '@react-navigation/native';
+import {useCallback} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -10,6 +12,12 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export const LoginScreen = () => {
+  const navigation = useNavigation();
+
+  const handleSubmit = useCallback(() => {
+    navigation.navigate('Home');
+  }, []);
+
   return (
     <>
       <StatusBar backgroundColor={'#fff'} barStyle={'dark-content'} />
@@ -40,7 +48,7 @@ export const LoginScreen = () => {
                   <TextInput placeholder="Username or email" />
                   <TextInput placeholder="Password" password />
                 </View>
-                <Button title="Continue" />
+                <Button onPress={handleSubmit} title="Continue" />
               </View>
               {/* End Form */}
             </View>
