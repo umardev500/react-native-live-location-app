@@ -1,6 +1,8 @@
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {RootStackParamList} from '@typed/rootStack';
+import {useEffect} from 'react';
+import {PermissionsAndroid, Platform} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {HomeScreen, LoginScreen, NotificationScreen} from './screens';
 import './styles/global.css';
@@ -8,6 +10,23 @@ import './styles/global.css';
 const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
+  useEffect(() => {
+    const requestPermissions = async () => {
+      try {
+        if (Platform.OS === 'android') {
+          await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
+          );
+        } else {
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    requestPermissions();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <NavigationContainer>
