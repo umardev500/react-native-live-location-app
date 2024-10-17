@@ -14,6 +14,10 @@ export const Header = () => {
     navigation.goBack();
   }, []);
 
+  const navigateToNotification = useCallback(() => {
+    navigation.navigate('Notification');
+  }, []);
+
   return (
     <View style={headerStyle} className="bg-white">
       {/* inner */}
@@ -30,7 +34,9 @@ export const Header = () => {
 
         {/* Right */}
         <View className="flex-row items-center gap-4">
-          <BellIconOn />
+          <TouchableWithoutFeedback onPress={navigateToNotification}>
+            <BellIconOn />
+          </TouchableWithoutFeedback>
           <MoreVert />
         </View>
       </View>
