@@ -1,6 +1,7 @@
 import {Button, TextInput} from '@components/atoms';
-import {StackActions, useNavigation} from '@react-navigation/native';
-import {useCallback} from 'react';
+import {API} from '@env';
+import {useNavigation} from '@react-navigation/native';
+import {useCallback, useState} from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -12,10 +13,33 @@ import {
 import {SafeAreaView} from 'react-native-safe-area-context';
 
 export const LoginScreen = () => {
+  const [loginLoading, setLoginLoading] = useState(false);
   const navigation = useNavigation();
 
-  const handleSubmit = useCallback(() => {
-    navigation.dispatch(StackActions.replace('Home'));
+  const handleSubmit = useCallback(async () => {
+    setLoginLoading(true);
+    const url = API + '/login';
+
+    try {
+      const resp = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: 'admin',
+          pasword: 'anambas',
+        }),
+      });
+
+      const json = await resp.json();
+      console.log(json);
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoginLoading(false);
+    }
+    // navigation.dispatch(StackActions.replace('Home'));
   }, []);
 
   return (
@@ -36,7 +60,7 @@ export const LoginScreen = () => {
                   <Text className="text-2xl text-gray-800 font-poppins font-semibold">
                     Hello Again! 👋
                   </Text>
-                  <Text className="font-roboto text-base text-gray-600">
+                  <Text className="font-roboto text-lg text-gray-600">
                     Your journey continues. Let’s log in!
                   </Text>
                 </View>
@@ -48,14 +72,18 @@ export const LoginScreen = () => {
                   <TextInput placeholder="Username or email" />
                   <TextInput placeholder="Password" password />
                 </View>
-                <Button onPress={handleSubmit} title="Continue" />
+                <Button
+                  loading={loginLoading}
+                  onPress={handleSubmit}
+                  title="Continue"
+                />
               </View>
               {/* End Form */}
             </View>
           </KeyboardAvoidingView>
 
           <View className="px-10 w-full">
-            <Text className="text-base text-center text-gray-500">
+            <Text className="text-sm text-center text-gray-500">
               Ensure your login credentials are kept private and secure.
             </Text>
           </View>
