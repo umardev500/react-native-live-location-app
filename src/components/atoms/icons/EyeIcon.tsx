@@ -3,8 +3,8 @@ import * as React from 'react';
 import Svg, {Path} from 'react-native-svg';
 const SvgComponent: React.FC<IconProps> = props => (
   <Svg
-    width={24}
-    height={24}
+    width={props.size || 24}
+    height={props.size || 24}
     fill={props.color || '#64748b'}
     viewBox="0 -960 960 960"
     {...props}>

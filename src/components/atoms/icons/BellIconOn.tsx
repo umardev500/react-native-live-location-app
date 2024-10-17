@@ -2,7 +2,7 @@ import {IconProps} from '@typed/icon';
 import * as React from 'react';
 import Svg, {Circle, Path} from 'react-native-svg';
 const SvgComponent: React.FC<IconProps> = props => (
-  <Svg width={24} height={24} {...props}>
+  <Svg width={props.size || 24} height={props.size || 24} {...props}>
     <Path
       fill={props.color || '#64748b'}
       fillRule="evenodd"
