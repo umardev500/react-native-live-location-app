@@ -39,36 +39,41 @@ export const LoginScreen = () => {
     },
     [],
   );
+  const dev = true;
 
   const handleSubmit = useCallback(async () => {
-    setLoginLoading(true);
-    const url = API + '/login';
-
-    try {
-      const resp = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          username: username.current,
-          password: password.current,
-        }),
-      });
-
-      if (resp.status === 401) {
-        Alert.alert('Invalid credentials');
-        return;
-      }
-
-      const json: LoginResponse = await resp.json();
-      setToken(() => json.token);
-      setUser(() => json.user);
+    if (dev) {
       navigation.dispatch(StackActions.replace('Home'));
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setLoginLoading(false);
+    } else {
+      setLoginLoading(true);
+      const url = API + '/login';
+
+      try {
+        const resp = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            username: username.current,
+            password: password.current,
+          }),
+        });
+
+        if (resp.status === 401) {
+          Alert.alert('Invalid credentials');
+          return;
+        }
+
+        const json: LoginResponse = await resp.json();
+        setToken(() => json.token);
+        setUser(() => json.user);
+        navigation.dispatch(StackActions.replace('Home'));
+      } catch (e) {
+        console.log(e);
+      } finally {
+        setLoginLoading(false);
+      }
     }
   }, []);
 

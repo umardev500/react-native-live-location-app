@@ -1,11 +1,14 @@
 import {useDeviceInfo} from '@hooks/useDeviceInfo';
 import {useLocalNotification} from '@hooks/useLocalNotification';
 import messaging from '@react-native-firebase/messaging';
-import {NavigationContainer} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  useNavigationContainerRef,
+} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {NotifState, notifStore} from '@store/notifStore';
 import {RootStackParamList} from '@typed/rootStack';
-import {useEffect} from 'react';
+import {useEffect, useRef} from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {HomeScreen, LoginScreen, NotificationScreen} from './screens';
@@ -16,6 +19,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 const App = () => {
   const displayLocalNotification = useLocalNotification();
   const setNotif = notifStore((state: NotifState) => state.setNotif);
+  const currentPage = useRef('');
 
   useDeviceInfo();
 
@@ -36,7 +40,9 @@ const App = () => {
         body: remoteMessage.notification?.body || '',
       });
 
-      setNotif(true);
+      if (currentPage.current !== 'Notification') {
+        setNotif(true);
+      }
     });
 
     return () => {
@@ -62,9 +68,21 @@ const App = () => {
     requestPermissions();
   }, []);
 
+  const navigationRef = useNavigationContainerRef();
+
   return (
     <SafeAreaProvider>
-      <NavigationContainer>
+      <NavigationContainer
+        ref={navigationRef}
+        onStateChange={async e => {
+          const routeName = navigationRef.getCurrentRoute()?.name;
+          if (routeName === 'Notification') {
+            console.log('current page is notification');
+            currentPage.current = 'Notification';
+          } else {
+            currentPage.current = routeName || '';
+          }
+        }}>
         <Stack.Navigator
           initialRouteName="Login"
           screenOptions={{
