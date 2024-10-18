@@ -9,16 +9,16 @@ import {ActivityIndicator, View} from 'react-native';
 import {useMMKVStorage} from 'react-native-mmkv-storage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
-const dummyNotifications: Notification[] = Array.from(
-  {length: 15},
-  (_, index) => ({
-    id: Math.random(),
-    user_id: 100 + (index + 1),
-    title: `Notification Title ${index + 1}`,
-    message: `This is the message for notification ${index + 1}.`,
-    created_at: new Date().toISOString(), // Current timestamp in ISO 8601 format
-  }),
-);
+// const dummyNotifications: Notification[] = Array.from(
+//   {length: 15},
+//   (_, index) => ({
+//     id: Math.random(),
+//     user_id: 100 + (index + 1),
+//     title: `Notification Title ${index + 1}`,
+//     message: `This is the message for notification ${index + 1}.`,
+//     created_at: new Date().toISOString(), // Current timestamp in ISO 8601 format
+//   }),
+// );
 
 export const NotificationScreen = () => {
   const [notification, setNotification] = useState<Notification[]>([]);
