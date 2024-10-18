@@ -50,6 +50,7 @@ export const LoginScreen = () => {
 
       if (username.current === '' || password.current === '') {
         Alert.alert('Please enter username and password');
+        setLoginLoading(false);
         return;
       }
 
