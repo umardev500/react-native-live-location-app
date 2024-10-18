@@ -7,7 +7,8 @@
       "@screens/*": ["./src/screens/*"],
       "@typed/*": ["./src/types/*"],
       "@hooks/*": ["./src/hooks/*"],
-      "@storage/*": ["./src/storage/*"]
+      "@storage/*": ["./src/storage/*"],
+      "@store/*": ["./src/store/*"]
     }
   }
 }

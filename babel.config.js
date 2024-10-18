@@ -12,6 +12,7 @@ module.exports = {
           '@typed': './src/types',
           '@hooks': './src/hooks',
           '@storage': './src/storage',
+          '@store': './src/store',
         },
       },
     ],

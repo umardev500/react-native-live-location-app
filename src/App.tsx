@@ -1,3 +1,4 @@
+import {useDeviceInfo} from '@hooks/useDeviceInfo';
 import {useLocalNotification} from '@hooks/useLocalNotification';
 import messaging from '@react-native-firebase/messaging';
 import {NavigationContainer} from '@react-navigation/native';
@@ -13,6 +14,8 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
   const displayLocalNotification = useLocalNotification();
+
+  useDeviceInfo();
 
   useEffect(() => {
     displayLocalNotification({title: 'Hello', body: 'World'});
