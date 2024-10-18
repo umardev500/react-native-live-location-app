@@ -13,6 +13,7 @@ module.exports = {
           '@hooks': './src/hooks',
           '@storage': './src/storage',
           '@store': './src/store',
+          '@utils': './src/utils',
         },
       },
     ],

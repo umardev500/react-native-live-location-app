@@ -56,7 +56,7 @@ const App = (props: Props) => {
       }
     });
 
-    const unsubNotifee = notifee.onForegroundEvent(async ({type, detail}) => {
+    const unsubNotifee = notifee.onForegroundEvent(async ({type}) => {
       if (type === EventType.PRESS) {
         navigation.navigate('Notification');
       }

@@ -1,5 +1,6 @@
 import {MoreHorz} from '@components/atoms';
 import {Notification} from '@typed/notif';
+import {formatDate} from '@utils/parseDate';
 import React from 'react';
 import {Text, View} from 'react-native';
 
@@ -19,7 +20,9 @@ export const NotificationItem = (props: Props) => {
           <MoreHorz size={18} color={'#9CA3AF'} />
         </View>
         <Text className="text-sm text-gray-600 mt-3">{message}</Text>
-        <Text className="text-sm text-gray-400 mt-1">{created_at}</Text>
+        <Text className="text-sm text-gray-400 mt-1">
+          {formatDate(created_at)}
+        </Text>
       </View>
     </>
   );
