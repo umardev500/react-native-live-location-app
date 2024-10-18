@@ -16,7 +16,6 @@ export const HomeScreen = () => {
 
   const updateLocation = async (coordinate: Coords | null) => {
     if (coordinate === null) {
-      console.log('null');
       setTimeout(() => {
         updateLocation(coords.current);
       }, 1000);

@@ -1,8 +1,10 @@
 import {useDeviceInfo} from '@hooks/useDeviceInfo';
 import {useLocalNotification} from '@hooks/useLocalNotification';
+import notifee, {EventType} from '@notifee/react-native';
 import messaging from '@react-native-firebase/messaging';
 import {
   NavigationContainer,
+  useNavigation,
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -18,11 +20,17 @@ import './styles/global.css';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
-const App = () => {
+type Props = {
+  currentPage: React.MutableRefObject<string>;
+};
+const App = (props: Props) => {
+  const {currentPage} = props;
+
   const displayLocalNotification = useLocalNotification();
   const setNotif = notifStore((state: NotifState) => state.setNotif);
-  const currentPage = useRef('');
+
   const [authToken] = useMMKVStorage<string>('token', mmkvStorage);
+  const navigation = useNavigation();
 
   useDeviceInfo();
 
@@ -48,8 +56,39 @@ const App = () => {
       }
     });
 
+    const unsubNotifee = notifee.onForegroundEvent(async ({type, detail}) => {
+      if (type === EventType.PRESS) {
+        navigation.navigate('Notification');
+      }
+    });
+
+    // Handle when the app is opened from a background/quit state from a notification
+    messaging().onNotificationOpenedApp(remoteMessage => {
+      console.log(
+        'Notification caused app to open from background state:',
+        remoteMessage.notification,
+      );
+      // Navigate to Notification screen
+      navigation.navigate('Notification');
+    });
+
+    // Check if the app was opened by a notification when in quit state
+    messaging()
+      .getInitialNotification()
+      .then(remoteMessage => {
+        if (remoteMessage) {
+          console.log(
+            'Notification caused app to open from quit state:',
+            remoteMessage.notification,
+          );
+          // Navigate to Notification screen
+          navigation.navigate('Notification');
+        }
+      });
+
     return () => {
       unsubscribe();
+      unsubNotifee();
     };
   }, []);
 
@@ -71,6 +110,26 @@ const App = () => {
     requestPermissions();
   }, []);
 
+  return (
+    <Stack.Navigator
+      initialRouteName="Login"
+      screenOptions={{
+        headerShown: false,
+      }}>
+      {authToken ? (
+        <>
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="Notification" component={NotificationScreen} />
+        </>
+      ) : (
+        <Stack.Screen name="Login" component={LoginScreen} />
+      )}
+    </Stack.Navigator>
+  );
+};
+
+const Wrapper = () => {
+  const currentPage = useRef('');
   const navigationRef = useNavigationContainerRef();
 
   return (
@@ -86,26 +145,10 @@ const App = () => {
             currentPage.current = routeName || '';
           }
         }}>
-        <Stack.Navigator
-          initialRouteName="Login"
-          screenOptions={{
-            headerShown: false,
-          }}>
-          {authToken ? (
-            <>
-              <Stack.Screen name="Home" component={HomeScreen} />
-              <Stack.Screen
-                name="Notification"
-                component={NotificationScreen}
-              />
-            </>
-          ) : (
-            <Stack.Screen name="Login" component={LoginScreen} />
-          )}
-        </Stack.Navigator>
+        <App currentPage={currentPage} />
       </NavigationContainer>
     </SafeAreaProvider>
   );
 };
 
-export default App;
+export default Wrapper;
