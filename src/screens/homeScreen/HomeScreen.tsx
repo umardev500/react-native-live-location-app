@@ -1,5 +1,6 @@
 import {HomeHeader, MapView} from '@components/organisms';
 import {useSendLocation} from '@hooks/useSendLocation';
+import {useNavigation} from '@react-navigation/native';
 import Mapbox from '@rnmapbox/maps';
 import {Coords} from '@typed/coords';
 import {useEffect, useRef, useState} from 'react';
@@ -8,6 +9,7 @@ import {StatusBar} from 'react-native';
 export const HomeScreen = () => {
   const [loading, setLoading] = useState(true);
   const coords = useRef<Coords | null>(null);
+  const navigation = useNavigation();
 
   const sendHook = useSendLocation();
   let timeOutId = useRef<NodeJS.Timeout | null>(null);
@@ -37,9 +39,27 @@ export const HomeScreen = () => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      updateLocation(coords.current);
     }, 1000);
   }, []);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      console.log('focussed');
+      updateLocation(coords.current);
+    });
+
+    const unsubscribeBlur = navigation.addListener('blur', () => {
+      console.log('blurred');
+      if (timeOutId.current) {
+        clearTimeout(timeOutId.current);
+      }
+    });
+
+    return () => {
+      unsubscribe();
+      unsubscribeBlur();
+    };
+  }, [navigation]);
 
   const handleSendLocation = (e: Mapbox.Location) => {
     coords.current = [e.coords.longitude, e.coords.latitude];
