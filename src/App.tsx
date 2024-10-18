@@ -96,9 +96,28 @@ const App = (props: Props) => {
     const requestPermissions = async () => {
       try {
         if (Platform.OS === 'android') {
-          await PermissionsAndroid.request(
+          const notifGranted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.POST_NOTIFICATIONS,
           );
+          console.log('notif:', notifGranted);
+          await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          );
+
+          const grantedCoarse = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
+          );
+          console.log('coarse:', grantedCoarse);
+
+          const grantedFine = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          );
+          console.log('fine:', grantedFine);
+
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_BACKGROUND_LOCATION,
+          );
+          console.log('bg:', granted);
         } else {
         }
       } catch (e) {
