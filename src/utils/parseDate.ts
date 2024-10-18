@@ -1,5 +1,5 @@
-export function formatDate(dateParam: string): string {
-  const date = new Date(dateParam);
+export function formatDate(dateString: string): string {
+  const date = new Date(dateString);
   const now = new Date();
   const oneDayInMs = 24 * 60 * 60 * 1000; // Milliseconds in a day
 
