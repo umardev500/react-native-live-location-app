@@ -45,6 +45,9 @@ export const HomeScreen = () => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       console.log('focussed');
+      if (timeOutId.current) {
+        clearTimeout(timeOutId.current);
+      }
       updateLocation(coords.current);
     });
 
