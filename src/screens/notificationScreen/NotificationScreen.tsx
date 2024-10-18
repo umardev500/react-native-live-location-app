@@ -21,21 +21,23 @@ const dummyNotifications: Notification[] = Array.from(
 );
 
 export const NotificationScreen = () => {
-  const [notification, setNotification] = useState<Notification[]>([
-    ...dummyNotifications,
-  ]);
+  const [notification, setNotification] = useState<Notification[]>([]);
   const token = useMMKVStorage('token', mmkvStorage);
   const setNotif = notifStore((state: NotifState) => state.setNotif);
   const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
 
   // clear notif
   useEffect(() => {
     setNotif(false);
   }, []);
 
-  const fetchNotifications = async () => {
-    const url = API + '/get-notif';
+  const fetchNotifications = async (refresh = false) => {
+    let url = API + '/get-notif';
+    if (nextPageUrl != null) {
+      url = nextPageUrl;
+    }
 
     try {
       const response = await fetch(url, {
@@ -47,17 +49,25 @@ export const NotificationScreen = () => {
       });
 
       const json: NotificationResponse = await response.json();
-      if (!(json.data.next_page_url === null)) {
-        setNextPageUrl(`${url}?page=${json.data.current_page + 1}`);
-        console.log('has data');
+
+      if (refresh) {
+        setNotification(json.data.data);
+        setNextPageUrl(null);
       } else {
-        console.log('no data');
+        setNotification(prev => [...prev, ...json.data.data]);
+        if (!(json.data.next_page_url === null)) {
+          setNextPageUrl(`${url}?page=${json.data.current_page + 1}`);
+          console.log('has data');
+        } else {
+          console.log('no data');
+          setNextPageUrl(null);
+        }
       }
-      setNotification(prev => [...prev, ...json.data.data]);
     } catch (error) {
       console.log(error);
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -84,11 +94,22 @@ export const NotificationScreen = () => {
     }
   };
 
+  const handleRefresh = () => {
+    setRefreshing(true);
+    fetchNotifications(true);
+    console.log('refereshing');
+  };
+
   return (
     <>
       <NotificationHeader />
       <View className="flex-1 bg-white" style={containerStyle}>
-        <NotificationList onReachEnd={handleReachEnd} data={notification} />
+        <NotificationList
+          refreshing={refreshing}
+          onRefresh={handleRefresh}
+          onReachEnd={handleReachEnd}
+          data={notification}
+        />
         {loading && (
           <View className="py-8">
             <ActivityIndicator color={'#6b7280'} size={'large'} />
