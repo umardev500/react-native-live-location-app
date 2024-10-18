@@ -3,13 +3,16 @@ import {API} from '@env';
 import {StackActions, useNavigation} from '@react-navigation/native';
 import {mmkvStorage} from '@storage/mmkv';
 import {LoginResponse, User} from '@typed/login';
-import {useCallback, useState} from 'react';
+import {useCallback, useRef, useState} from 'react';
 import {
+  Alert,
   KeyboardAvoidingView,
+  NativeSyntheticEvent,
   Platform,
   StatusBar,
   StyleSheet,
   Text,
+  TextInputChangeEventData,
   View,
 } from 'react-native';
 import {useMMKVStorage} from 'react-native-mmkv-storage';
@@ -20,6 +23,22 @@ export const LoginScreen = () => {
   const navigation = useNavigation();
   const [, setToken] = useMMKVStorage<string>('token', mmkvStorage);
   const [, setUser] = useMMKVStorage<User>('user', mmkvStorage);
+  const username = useRef('');
+  const password = useRef('');
+
+  const handleUsernameChange = useCallback(
+    (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+      username.current = e.nativeEvent.text;
+    },
+    [],
+  );
+
+  const handlePasswordChange = useCallback(
+    (e: NativeSyntheticEvent<TextInputChangeEventData>) => {
+      password.current = e.nativeEvent.text;
+    },
+    [],
+  );
 
   const handleSubmit = useCallback(async () => {
     setLoginLoading(true);
@@ -32,10 +51,15 @@ export const LoginScreen = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          username: 'admin',
-          password: 'anambas',
+          username: username.current,
+          password: password.current,
         }),
       });
+
+      if (resp.status === 401) {
+        Alert.alert('Invalid credentials');
+        return;
+      }
 
       const json: LoginResponse = await resp.json();
       setToken(() => json.token);
@@ -75,8 +99,15 @@ export const LoginScreen = () => {
               {/* Form */}
               <View className="gap-5 px-4">
                 <View className="gap-4">
-                  <TextInput placeholder="Username or email" />
-                  <TextInput placeholder="Password" password />
+                  <TextInput
+                    onChange={handleUsernameChange}
+                    placeholder="Username or email"
+                  />
+                  <TextInput
+                    onChange={handlePasswordChange}
+                    placeholder="Password"
+                    password
+                  />
                 </View>
                 <Button
                   loading={loginLoading}
