@@ -1,3 +1,4 @@
+export * from './coords';
 export * from './device';
 export * from './icon';
 export * from './login';

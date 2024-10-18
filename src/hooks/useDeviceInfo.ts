@@ -19,7 +19,7 @@ export const useDeviceInfo = () => {
         uniqueId,
       });
     } catch (e) {
-      console.log(e);
+      console.log('error', e);
     }
   };
 

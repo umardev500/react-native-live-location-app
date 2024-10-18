@@ -5,7 +5,13 @@ import {PermissionsAndroid, Platform, StyleSheet, View} from 'react-native';
 
 Mapbox.setAccessToken(MAPBOX_TOKEN);
 
-export const MapView = () => {
+type Props = {
+  handleUpdate: (location: Mapbox.Location) => void;
+};
+
+export const MapView = (props: Props) => {
+  const {handleUpdate} = props;
+
   useEffect(() => {
     const checkLocationPermission = async () => {
       try {
@@ -27,7 +33,12 @@ export const MapView = () => {
     <View className="flex-1">
       <Mapbox.MapView style={styles.map}>
         <Mapbox.Camera followZoomLevel={8} followUserLocation />
-        <Mapbox.UserLocation showsUserHeadingIndicator visible animated />
+        <Mapbox.UserLocation
+          onUpdate={handleUpdate}
+          showsUserHeadingIndicator
+          visible
+          animated
+        />
       </Mapbox.MapView>
     </View>
   );
