@@ -3,6 +3,7 @@ import {useLocalNotification} from '@hooks/useLocalNotification';
 import messaging from '@react-native-firebase/messaging';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {NotifState, notifStore} from '@store/notifStore';
 import {RootStackParamList} from '@typed/rootStack';
 import {useEffect} from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
@@ -14,6 +15,7 @@ const Stack = createStackNavigator<RootStackParamList>();
 
 const App = () => {
   const displayLocalNotification = useLocalNotification();
+  const setNotif = notifStore((state: NotifState) => state.setNotif);
 
   useDeviceInfo();
 
@@ -33,6 +35,8 @@ const App = () => {
         title: remoteMessage.notification?.title || '',
         body: remoteMessage.notification?.body || '',
       });
+
+      setNotif(true);
     });
 
     return () => {
