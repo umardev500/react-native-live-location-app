@@ -74,7 +74,7 @@ const App = () => {
     <SafeAreaProvider>
       <NavigationContainer
         ref={navigationRef}
-        onStateChange={async e => {
+        onStateChange={async () => {
           const routeName = navigationRef.getCurrentRoute()?.name;
           if (routeName === 'Notification') {
             console.log('current page is notification');
