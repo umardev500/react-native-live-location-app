@@ -1,15 +1,14 @@
 import {NotificationItem} from '@components/molecules';
+import {Notification} from '@typed/notif';
 import {FlatList} from 'react-native';
 
-export const NotificationList = () => {
-  const data = Array.from({length: 30}, (_, i) => {
-    // Example data: fill it with numbers, strings, or objects as needed
-    return {
-      id: i + 1,
-      name: `Item ${i + 1}`,
-      value: Math.random().toFixed(2), // Random value between 0 and 1
-    };
-  });
+type Props = {
+  data: Notification[];
+};
+
+export const NotificationList = (props: Props) => {
+  const {data} = props;
+  console.log(data[0]);
 
   const renderItem = () => {
     return <NotificationItem />;

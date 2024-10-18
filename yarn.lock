@@ -3832,6 +3832,7 @@ __metadata:
     prettier: 2.8.8
     react: 18.3.1
     react-native: 0.75.4
+    react-native-device-info: ^13.1.0
     react-native-dotenv: ^3.4.11
     react-native-gesture-handler: ^2.20.0
     react-native-mmkv-storage: ^0.10.3
@@ -9638,6 +9639,15 @@ __metadata:
     react-native-svg:
       optional: true
   checksum: 8856ecc98f2aa93da27a45acaf628c606d323f47d64f711923d8b9eca1a8b11fa44aa67eedc0fef88abd749980966771b8b321eb055b8fbfb82f51421de5ae86
+  languageName: node
+  linkType: hard
+
+"react-native-device-info@npm:^13.1.0":
+  version: 13.1.0
+  resolution: "react-native-device-info@npm:13.1.0"
+  peerDependencies:
+    react-native: "*"
+  checksum: e05cd870981b8366bcb43f89d8565f123b1c3f727d399db03d7ac5e5cda6d06da3d326d06291e11d4920223dbd3db22631a50e2c3d58d8a8c62e196e59518e8e
   languageName: node
   linkType: hard
 
