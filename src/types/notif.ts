@@ -2,6 +2,7 @@
 export interface Notification {
   id: number;
   user_id: number;
+  title: string;
   message: string;
   created_at: string; // ISO 8601 format or any valid date-time string
 }

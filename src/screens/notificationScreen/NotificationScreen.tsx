@@ -5,14 +5,29 @@ import {mmkvStorage} from '@storage/mmkv';
 import {NotifState, notifStore} from '@store/notifStore';
 import {Notification, NotificationResponse} from '@typed/notif';
 import {useEffect, useState} from 'react';
-import {View} from 'react-native';
+import {ActivityIndicator, View} from 'react-native';
 import {useMMKVStorage} from 'react-native-mmkv-storage';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
 
+const dummyNotifications: Notification[] = Array.from(
+  {length: 15},
+  (_, index) => ({
+    id: Math.random(),
+    user_id: 100 + (index + 1),
+    title: `Notification Title ${index + 1}`,
+    message: `This is the message for notification ${index + 1}.`,
+    created_at: new Date().toISOString(), // Current timestamp in ISO 8601 format
+  }),
+);
+
 export const NotificationScreen = () => {
-  const [notification, setNotification] = useState<Notification[]>([]);
+  const [notification, setNotification] = useState<Notification[]>([
+    ...dummyNotifications,
+  ]);
   const token = useMMKVStorage('token', mmkvStorage);
   const setNotif = notifStore((state: NotifState) => state.setNotif);
+  const [nextPageUrl, setNextPageUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
   // clear notif
   useEffect(() => {
@@ -32,14 +47,26 @@ export const NotificationScreen = () => {
       });
 
       const json: NotificationResponse = await response.json();
-      setNotification(json.data.data);
+      if (!(json.data.next_page_url === null)) {
+        setNextPageUrl(`${url}?page=${json.data.current_page + 1}`);
+        console.log('has data');
+      } else {
+        console.log('no data');
+      }
+      setNotification(prev => [...prev, ...json.data.data]);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     fetchNotifications();
+
+    return () => {
+      setNotification([]);
+    };
   }, []);
 
   const insets = useSafeAreaInsets();
@@ -47,11 +74,26 @@ export const NotificationScreen = () => {
     paddingBottom: insets.bottom,
   };
 
+  const handleReachEnd = () => {
+    console.log('reach end');
+    if (nextPageUrl) {
+      setLoading(true);
+      fetchNotifications();
+    } else {
+      console.log('no more data to fetch');
+    }
+  };
+
   return (
     <>
       <NotificationHeader />
       <View className="flex-1 bg-white" style={containerStyle}>
-        <NotificationList data={notification} />
+        <NotificationList onReachEnd={handleReachEnd} data={notification} />
+        {loading && (
+          <View className="py-8">
+            <ActivityIndicator color={'#6b7280'} size={'large'} />
+          </View>
+        )}
       </View>
     </>
   );

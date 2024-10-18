@@ -1,22 +1,27 @@
 import {NotificationItem} from '@components/molecules';
 import {Notification} from '@typed/notif';
-import {FlatList} from 'react-native';
+import {FlatList, ListRenderItem} from 'react-native';
 
 type Props = {
   data: Notification[];
+  onReachEnd?: () => void;
 };
 
 export const NotificationList = (props: Props) => {
-  const {data} = props;
-  console.log(data[0]);
+  const {data, onReachEnd} = props;
 
-  const renderItem = () => {
-    return <NotificationItem />;
+  const renderItem: ListRenderItem<Notification> = ({item}) => {
+    return <NotificationItem {...item} />;
   };
 
   return (
     <>
-      <FlatList data={data} renderItem={renderItem} />
+      <FlatList
+        onEndReached={onReachEnd}
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item.id.toString()}
+      />
     </>
   );
 };
