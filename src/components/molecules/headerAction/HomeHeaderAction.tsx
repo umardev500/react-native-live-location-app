@@ -1,4 +1,4 @@
-import {BellIcon, BellIconOn, MoreVert} from '@components/atoms';
+import {BellIcon, BellIconOn} from '@components/atoms';
 import {useNavigation} from '@react-navigation/native';
 import {notifStore} from '@store/notifStore';
 import {useCallback} from 'react';
@@ -19,7 +19,7 @@ export const HomeHeaderAction = () => {
       <TouchableWithoutFeedback onPress={navigateToNotification}>
         {hasNotif ? <BellIconOn /> : <BellIcon />}
       </TouchableWithoutFeedback>
-      <MoreVert />
+      {/* <MoreVert /> */}
     </HeaderAction>
   );
 };
