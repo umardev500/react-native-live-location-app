@@ -39,7 +39,7 @@ export const LoginScreen = () => {
     },
     [],
   );
-  const dev = true;
+  const dev = false;
 
   const handleSubmit = useCallback(async () => {
     if (dev) {
