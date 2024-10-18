@@ -48,6 +48,11 @@ export const LoginScreen = () => {
       setLoginLoading(true);
       const url = API + '/login';
 
+      if (username.current === '' || password.current === '') {
+        Alert.alert('Please enter username and password');
+        return;
+      }
+
       try {
         const resp = await fetch(url, {
           method: 'POST',
