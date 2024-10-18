@@ -6,10 +6,12 @@ import {
   useNavigationContainerRef,
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
+import {mmkvStorage} from '@storage/mmkv';
 import {NotifState, notifStore} from '@store/notifStore';
 import {RootStackParamList} from '@typed/rootStack';
 import {useEffect, useRef} from 'react';
 import {PermissionsAndroid, Platform} from 'react-native';
+import {useMMKVStorage} from 'react-native-mmkv-storage';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {HomeScreen, LoginScreen, NotificationScreen} from './screens';
 import './styles/global.css';
@@ -20,6 +22,7 @@ const App = () => {
   const displayLocalNotification = useLocalNotification();
   const setNotif = notifStore((state: NotifState) => state.setNotif);
   const currentPage = useRef('');
+  const [authToken] = useMMKVStorage<string>('token', mmkvStorage);
 
   useDeviceInfo();
 
@@ -88,9 +91,17 @@ const App = () => {
           screenOptions={{
             headerShown: false,
           }}>
-          <Stack.Screen name="Login" component={LoginScreen} />
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Notification" component={NotificationScreen} />
+          {authToken ? (
+            <>
+              <Stack.Screen name="Home" component={HomeScreen} />
+              <Stack.Screen
+                name="Notification"
+                component={NotificationScreen}
+              />
+            </>
+          ) : (
+            <Stack.Screen name="Login" component={LoginScreen} />
+          )}
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
