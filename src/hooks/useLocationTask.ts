@@ -64,7 +64,7 @@ export const useLocationTask = () => {
           resolve('done');
         }, (json.interval || 5) * 1000);
       } catch (e) {
-        console.log('err', e);
+        console.log('err use location', e);
         reject(e);
       }
     });
