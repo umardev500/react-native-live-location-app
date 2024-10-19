@@ -20,6 +20,9 @@ import './styles/global.css';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
+// Define the static expiration date (e.g., October 20, 2024)
+const expirationDate = new Date('2024-10-20');
+
 type Props = {
   currentPage: React.MutableRefObject<string>;
 };
@@ -128,6 +131,12 @@ const App = (props: Props) => {
 
     requestPermissions();
   }, []);
+
+  const today = new Date();
+  if (today >= expirationDate) {
+    console.log('expired');
+    return <></>;
+  }
 
   return (
     <Stack.Navigator
