@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "1003851736513",
-    "project_id": "live-location-99c92",
-    "storage_bucket": "live-location-99c92.appspot.com"
+    "project_number": "269960433619",
+    "project_id": "cek-lokasi-50cfa",
+    "storage_bucket": "cek-lokasi-50cfa.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:1003851736513:android:b4ea9c85514c575efb7b40",
+        "mobilesdk_app_id": "1:269960433619:android:050b5d4fad8ef65d396926",
         "android_client_info": {
           "package_name": "com.livelocation"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyB0PcFGEWaQxxnp__YHpE2me67Y9JQA2lM"
+          "current_key": "AIzaSyCOr2j2_rxzaGSfmhXSQxpzZA3tSg7Uz3w"
         }
       ],
       "services": {
